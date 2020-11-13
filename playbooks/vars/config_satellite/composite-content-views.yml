@@ -1,0 +1,11 @@
+---
+
+- name: composite-rhel8
+  description: rhel 8 packages
+  auto_publish: false
+  component_content_views:
+    - name: cv-ansible-rhel8
+    - name: cv-server-rhel8
+    - name: cv-appstream-rhel8
+    - name: cv-satellitetools-rhel8
+    - name: cv-kickstart-rhel8.4

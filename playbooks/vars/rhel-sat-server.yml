@@ -1,0 +1,43 @@
+---
+
+# dedicated disk for satellite VG
+host_device: "{{ sat_vg_disk }}"
+
+# Satellite VG name
+vg_name: satdata
+
+# Filesystems
+logical_volumes:
+  - name: cache
+    size: 20g
+    mount_dir: /var/cache/pulp
+    fstype: xfs
+  - name: pulp
+    size: 300g
+    mount_dir: /var/lib/pulp
+    fstype: xfs
+  - name: mongodb
+    size: 50g
+    mount_dir: /var/lib/mongodb
+    fstype: xfs
+  - name: log
+    size: 10g
+    mount_dir: /var/log
+    fstype: xfs
+  - name: pqsql
+    size: 10g
+    mount_dir: /var/opt/rh/rh-postgresql12/lib/pgsql
+    fstype: xfs
+  - name: squid
+    size: 10g
+    mount_dir: /var/spool/squid
+    fstype: xfs
+
+rhsm_setup_insights_client: yes
+
+rhsm_repos:
+  - rhel-7-server-rpms
+  - rhel-server-rhscl-7-rpms
+  - "rhel-7-server-satellite-{{ satellite_version }}-rpms"
+  - rhel-7-server-satellite-maintenance-6-rpms
+  - rhel-7-server-ansible-2.9-rpms

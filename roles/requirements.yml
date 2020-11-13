@@ -1,0 +1,11 @@
+---
+roles:
+  - src: linux-system-roles.storage
+
+  - src: RedHatInsights.insights-client
+
+  - src: git+https://github.com/flyemsafe/swygue-redhat-subscription.git
+    version: dev
+
+  - src: https://github.com/flyemsafe/swygue-lvm.git
+    version: v1.0.1

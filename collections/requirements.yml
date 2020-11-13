@@ -1,0 +1,6 @@
+---
+collections:
+  - theforeman.foreman
+  - jjaswanson4.setup_rhel_for_satellite
+  - jjaswanson4.install_satellite
+  - jjaswanson4.configure_satellite
