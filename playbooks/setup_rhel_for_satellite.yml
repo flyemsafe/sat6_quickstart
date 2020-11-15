@@ -9,8 +9,8 @@
     - vars/main.yml
     - vars/rhel-sat-server.yml
 
-  collections:
-    - jjaswanson4.setup_rhel_for_satellitea
+  vars:
+    system_registered: no
 
   pre_tasks:
     - name: check for RHEL7
@@ -63,22 +63,25 @@
       when:
         - dns_status.rc | int != 0
 
-    - name: get current registration point
-      shell: subscription-manager config
-      register: registration_status
-      check_mode: false
+    - name: check registration status
+      command: subscription-manager identity
+      ignore_errors: yes
+      register: subscription_status
       changed_when: false
-      when:
-        - "'satellite' in group_names"
+      become: yes
+
+    - name: set subscription status
+      set_fact:
+        system_registered: yes
+      when: "'This system is not yet registered' not in subscription_status.stderr"
 
   tasks:
     - name: ensure system is registered to Red Hat
       include_role:
         name: swygue-redhat-subscription
-      when:
-        - "'satellite' in group_names"
-        - "'subscription.rhsm.redhat.com' not in registration_status.stdout"
+      when: not system_registered or not is_repos_enabled
 
     - name: create satellite paritions
       include_role:
         name: swygue-lvm
+

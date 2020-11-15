@@ -9,3 +9,6 @@ roles:
 
   - src: https://github.com/flyemsafe/swygue-lvm.git
     version: v1.0.1
+
+  - src: git+https://github.com/flyemsafe/swygue-install-satellite.git
+    version: dev
