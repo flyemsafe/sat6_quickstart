@@ -1,3 +1,3 @@
 ---
 
-- name: "{{ satellite_org }}"
+- name: "{{ satellite_default_organization }}"

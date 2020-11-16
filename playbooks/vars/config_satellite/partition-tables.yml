@@ -4,6 +4,6 @@
   file: files/satellite/rhel8-ptable.erb
   os_family: Redhat
   organizations:
-    - name: "{{ satellite_org }}"
+    - name: "{{ satellite_default_organization }}"
   locations:
-    - name: "{{ satellite_location }}"
+    - name: "{{ satellite_default_location }}"

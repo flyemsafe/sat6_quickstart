@@ -6,12 +6,12 @@
   compute_resource: vcenter01.lab.msp.redhat.com
   content_source: satellite02.lab.msp.redhat.com
   content_view: composite-rhel8
-  domain: "{{ domain }}"
+  satellite_domain: "{{ satellite_domain }}"
   lifecycle_environment: production
   operatingsystem: RedHat "{{ rhel_release }}"
-  organization_of_content_source: "{{ satellite_org }}
+  organization_of_content_source: "{{ satellite_default_organization }}
   organizations:
-    - "{{ satellite_org }}
+    - "{{ satellite_default_organization }}
   locations:
     - datacenter_1
   subnet: datacenter_1-subnet-10.15.108.0_22
@@ -27,12 +27,12 @@
   compute_resource: vcenter01.lab.msp.redhat.com
   content_source: satellite02.lab.msp.redhat.com
   content_view: composite-rhel8
-  domain: "{{ domain }}"
+  satellite_domain: "{{ satellite_domain }}"
   lifecycle_environment: production
   operatingsystem: RedHat "{{ rhel_release }}"
-  organization_of_content_source: "{{ satellite_org }}
+  organization_of_content_source: "{{ satellite_default_organization }}
   organizations:
-    - "{{ satellite_org }}
+    - "{{ satellite_default_organization }}
   locations:
     - datacenter_1
   subnet: datacenter_1-subnet-10.15.108.0_22

@@ -9,8 +9,8 @@
   ipam: None
   boot_mode: Static
   organizations:
-    - name: "{{ satellite_org }}"
+    - name: "{{ satellite_default_organization }}"
   locations:
-    - name: "{{ satellite_location }}"
-  domains:
-    - name: "{{ domain }}"
+    - name: "{{ satellite_default_location }}"
+  satellite_domains:
+    - name: "{{ satellite_domain }}"

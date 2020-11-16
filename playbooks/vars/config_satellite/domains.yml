@@ -1,7 +1,7 @@
 ---
 
-- name: "{{ domain }}"
+- name: "{{ satellite_domain }}"
   organizations:
-    - name: "{{ satellite_org }}"
+    - name: "{{ satellite_default_organization }}"
   locations:
-    - name: "{{ satellite_location }}"
+    - name: "{{ satellite_default_location }}"

@@ -3,12 +3,12 @@
 - name: Provision RHEL
   file: files/satellite/provision-rhel.erb
   organizations:
-    - "{{ satellite_org }}"
+    - "{{ satellite_default_organization }}"
   locations:
-    - "{{ satellite_location }}"
+    - "{{ satellite_default_location }}"
 - name: register-rhel
   file: files/satellite/register-rhel.erb
   organizations:
-    - "{{ satellite_org }}"
+    - "{{ satellite_default_organization }}"
   locations:
-    - "{{ satellite_location }}"
+    - "{{ satellite_default_location }}"
