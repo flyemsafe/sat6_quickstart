@@ -7,9 +7,6 @@
     - vars/main.yml
     - vars/satellite.yml
 
-  collections:
-    - theforeman.foreman
-
   roles:
     - swygue-install-satellite
 

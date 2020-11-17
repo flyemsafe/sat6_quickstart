@@ -1,6 +1,15 @@
 ---
 collections:
-  - theforeman.foreman
-  - jjaswanson4.setup_rhel_for_satellite
-  - jjaswanson4.install_satellite
-  - jjaswanson4.configure_satellite
+  - name: theforeman.foreman
+    source: https://galaxy.ansible.com
+
+  - name: jjaswanson4.setup_rhel_for_satellite
+    source: https://galaxy.ansible.com
+
+  - name: jjaswanson4.install_satellite
+    source: https://galaxy.ansible.com
+
+  - name: jjaswanson4.configure_satellite
+    source: https://galaxy.ansible.com
+
+  - redhat.satellite

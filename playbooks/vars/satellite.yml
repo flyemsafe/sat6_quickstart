@@ -18,12 +18,22 @@ satellite:
   katello:
     - organization_name: "{{ satellite_default_organization }}"
       state: present
-      manifest: files/manifest.zip
+      manifest: /root/manifest.zip
       repo_sync_attempts: 1
       lifecycle_environments: "{{ lookup('file', 'vars/config_satellite/lifecycle-environments.yml') | from_yaml }}"
       content_views: "{{ lookup('file', 'vars/config_satellite/content-views.yml') | from_yaml }}"
       composite_content_views: "{{ lookup('file', 'vars/config_satellite/composite-content-views.yml') | from_yaml }}"
       activation_keys: "{{ lookup('file', 'vars/config_satellite/activation-keys.yml') | from_yaml }}"
+
+organization:
+  organization_name: "{{ satellite_default_organization }}"
+  state: present
+  manifest: /root/manifest.zip
+  repo_sync_attempts: 1
+  lifecycle_environments: "{{ lookup('file', 'vars/config_satellite/lifecycle-environments.yml') | from_yaml }}"
+  content_views: "{{ lookup('file', 'vars/config_satellite/content-views.yml') | from_yaml }}"
+  composite_content_views: "{{ lookup('file', 'vars/config_satellite/composite-content-views.yml') | from_yaml }}"
+  activation_keys: "{{ lookup('file', 'vars/config_satellite/activation-keys.yml') | from_yaml }}"
 
 rhsm_repos:
   - rhel-7-server-rpms
@@ -33,6 +43,7 @@ rhsm_repos:
   - rhel-7-server-satellite-maintenance-6-rpms
 
 satellite_repos: "{{ rhsm_repos }}"
+satellite_verify_ssl: no
 #capsule:
 #  locations:
 #    - name: datacenter_1

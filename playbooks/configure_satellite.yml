@@ -2,13 +2,17 @@
 
 - name: configure satellite
   hosts:
-    - satellite
+    - sat
+
+  vars_files:
+    - vars/main.yml
+    - vars/satellite.yml
+
   collections:
     - jjaswanson4.configure_satellite
-  pre_tasks:
-    - name: load in satellite vars
-      include_vars:
-        file: "{{ vars_file }}"
+    - redhat.satellite
+
   roles:
-    - jjaswanson4.configure_satellite.configure_foreman
-    - jjaswanson4.configure_satellite.configure_katello
+    - redhat-satellite-quickstart
+    #- jjaswanson4.configure_satellite.configure_foreman
+    #- jjaswanson4.configure_satellite.configure_katello
