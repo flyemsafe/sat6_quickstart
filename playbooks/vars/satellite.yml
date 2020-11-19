@@ -1,50 +1,54 @@
 ---
 ignore_compute_resource_errors: true
-
-satellite:
-  version: "{{ satellite_version }}"
-  admin_username: "{{ satellite_user }}"
-  admin_password: "{{ satellite_password }}"
-  foreman:
-    organizations: "{{ lookup('file', 'vars/config_satellite/organizations.yml') | from_yaml }}"
-    locations: "{{ lookup('file', 'vars/config_satellite/locations.yml') | from_yaml }}"
-    domains: "{{ lookup('file', 'vars/config_satellite/domains.yml') | from_yaml }}"
-    #subnets: "{{ lookup('file', 'vars/config_satellite/subnets.yml') | from_yaml }}"
-    #compute_resources: "{{ lookup('file', 'vars/config_satellite/compute-resources.yml') | from_yaml }}"
-    #compute_profiles: "{{ lookup('file', 'vars/config_satellite/compute-profiles.yml') | from_yaml }}"
-    #hostgroups: "{{ lookup('file', 'vars/config_satellite/hostgroups.yml') | from_yaml }}"
-    #partition_tables: "{{ lookup('file', 'vars/config_satellite/partition-tables.yml') | from_yaml }}"
-    #operating_systems: "{{ lookup('file', 'vars/config_satellite/operating-systems.yml') | from_yaml }}"
-  katello:
-    - organization_name: "{{ satellite_default_organization }}"
-      state: present
-      manifest: /root/manifest.zip
-      repo_sync_attempts: 1
-      lifecycle_environments: "{{ lookup('file', 'vars/config_satellite/lifecycle-environments.yml') | from_yaml }}"
-      content_views: "{{ lookup('file', 'vars/config_satellite/content-views.yml') | from_yaml }}"
-      composite_content_views: "{{ lookup('file', 'vars/config_satellite/composite-content-views.yml') | from_yaml }}"
-      activation_keys: "{{ lookup('file', 'vars/config_satellite/activation-keys.yml') | from_yaml }}"
-
-organization:
-  organization_name: "{{ satellite_default_organization }}"
-  state: present
-  manifest: /root/manifest.zip
-  repo_sync_attempts: 1
-  lifecycle_environments: "{{ lookup('file', 'vars/config_satellite/lifecycle-environments.yml') | from_yaml }}"
-  content_views: "{{ lookup('file', 'vars/config_satellite/content-views.yml') | from_yaml }}"
-  composite_content_views: "{{ lookup('file', 'vars/config_satellite/composite-content-views.yml') | from_yaml }}"
-  activation_keys: "{{ lookup('file', 'vars/config_satellite/activation-keys.yml') | from_yaml }}"
-
-rhsm_repos:
-  - rhel-7-server-rpms
-  - rhel-server-rhscl-7-rpms
-  - "rhel-7-server-satellite-{{ satellite_version }}-rpms"
-  - "rhel-7-server-ansible-{{ ansible__repo_version }}-rpms"
-  - rhel-7-server-satellite-maintenance-6-rpms
-
 satellite_repos: "{{ rhsm_repos }}"
 satellite_verify_ssl: no
-#capsule:
-#  locations:
-#    - name: datacenter_1
+rhsm_verify_ssl: yes
+manifest_download_dir: /root
+local_manifest_path: /home/rheron/Downloads/manifest_Lunchbox_20200728T182341Z.zip
+
+# Products releases
+sat_tools: "{{ satellite_version }"
+
+
+# setup satellite org, location with with products
+satellite_orgs:
+  - name: ACME2
+    admin_username: "{{ satellite_user }}"
+    admin_password: "{{ satellite_password }}"
+    state: present
+    sync_right_away: no
+    redhat_manifest:
+      name: sat6u8v2
+      uuid: e7d1a9b1-fbc6-49bc-af5f-effe3b589437
+      use_local_manifest: yes
+      path: /root/satellite_manifest.zip
+      state: present
+      pool:
+        - id: 8a85f99b70d0559c0171092c28b946b3
+          state: present
+          quantity: 1
+        - id: 8a85f99b727637b201729a1f407f5f3b
+          state: present
+          quantity: 1
+    locations:
+      - name: Orlando
+        state: present
+    products:
+      - rhel8
+    lifecycle_environments:
+      - name: Dev
+        prior: Library
+        state: present
+      - name: QA
+        prior: Dev
+        state: present
+      - name: Production
+        prior: QA
+        state: present
+    sync_plans:
+      - name: "Red Hat Sync Plan"
+        date: "2019/06/16 00:00:00 +0000"
+        interval: daily
+        enabled: true
+        description: "Sync Plan for Red Hat products"
 

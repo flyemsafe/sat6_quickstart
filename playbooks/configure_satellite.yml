@@ -1,6 +1,7 @@
 ---
 
 - name: configure satellite
+  gather_facts: no
   hosts:
     - sat
 
@@ -11,6 +12,25 @@
   collections:
     - jjaswanson4.configure_satellite
     - redhat.satellite
+
+#  tasks:
+#    - name: show disk size
+#      debug:
+#        var: ansible_devices.sdb.size.split()[0]|int
+#      when: ansible_devices.sdb.size.split()[0]|int >= 500
+#
+#    - name: show me the results
+#      debug:
+#        msg:
+#          - "pool_id: {{ item.1.id }}"
+#          - "quanity: {{ item.1.quantity }}"
+#          - "name: {{ item.0.redhat_manifest.name }}"
+#          - "path: {{ item.0.redhat_manifest.path }}"
+#      with_subelements:
+#        - "{{ satellite_orgs }}"
+#        - redhat_manifest.pool
+#      loop_control:
+#        label: "{{ item.0.name }}"
 
   roles:
     - redhat-satellite-quickstart
