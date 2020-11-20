@@ -16,7 +16,7 @@ Review these two blog posts to understand how to setup your RHEL system or Ansib
 If you execute the playbooks as job templates via Ansible Tower and have followed the Tower setup from the above blog post. The collections and roles will be downloaded automatically, assuming your Tower as access to the internet. If running from a RHEL ansible control node, follow the steps below to download the roles and collections.
 
 **Collections**
-1. Copy the `ansible.cfg.sample` to `ansible.cfg.sample` then update the galaxy section to include your auth token as per the blog post above. Make any other changes you would like.
+1. Copy the `ansible.cfg.sample` to `ansible.cfg` then update the galaxy section to include your auth token as per the blog post above. Make any other changes you would like.
 
 2. Install the required collections
 ```
@@ -31,6 +31,9 @@ galaxy install -r roles/requirements.yml
 
 **Vars**
 Please review playbooks/vars/main.yml it is documented to help you understand what needs to be changed.
+
+**Inventory**
+Update `inventory/host.yml` to match your Satellite.
 
 **Execute the playbooks**
 
