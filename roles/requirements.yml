@@ -1,7 +1,5 @@
 ---
 roles:
-  - src: linux-system-roles.storage
-
   - src: RedHatInsights.insights-client
 
   - src: git+https://github.com/flyemsafe/swygue-redhat-subscription.git

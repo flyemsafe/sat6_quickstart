@@ -1,54 +1,37 @@
 ---
-ignore_compute_resource_errors: true
 satellite_repos: "{{ rhsm_repos }}"
 satellite_verify_ssl: no
 rhsm_verify_ssl: yes
 manifest_download_dir: /root
-local_manifest_path: /home/rheron/Downloads/manifest_satellite01_20201119T213032Z.zip
+local_manifest_path: "{{ downloaded_manifest_file }}"
+satellite_url: "https://{{ satellite_hostname }}"
 
 # Products releases
 sat_tools: "{{ satellite_version }"
-rhel8_eus: "8.2"
-
 
 # setup satellite org, location with with products
 satellite_orgs:
-  - name: DEMO2
+  - name: "{{ satellite_default_organization }}"
     admin_username: "{{ satellite_user }}"
     admin_password: "{{ satellite_password }}"
     state: present
-    sync_right_away: no
+    sync_right_away: "{{ sync_now }}"
     redhat_manifest:
-      name: sat6u8v2
-      uuid: e7d1a9b1-fbc6-49bc-af5f-effe3b589437
-      use_local_manifest: yes
-      path: /root/satellite_manifest.zip
+      name: "{{ manifest_name }}"
+      uuid: "{{ manifest_uuid }}"
+      use_local_manifest: "{{ create_manifest }}"
+#      path: /root/satellite_manifest.zip
       state: present
-      pool:
-        - id: 8a85f99b70d0559c0171092c28b946b3
-          state: present
-          quantity: 1
-        - id: 8a85f99b727637b201729a1f407f5f3b
-          state: present
-          quantity: 1
+      pool: "{{ pool_ids }}"
     locations:
-      - name: Orlando
+      - name: "{{ satellite_default_location }}"
         state: present
     products: "{{ products_to_enable }}"
-    lifecycle_environments:
-      - name: Dev
-        prior: Library
-        state: present
-      - name: QA
-        prior: Dev
-        state: present
-      - name: Production
-        prior: QA
-        state: present
+    lifecycle_environments: "{{ default_lcen }}"
     sync_plans:
-      - name: "Red Hat Sync Plan"
-        date: "2019/06/16 00:00:00 +0000"
-        interval: daily
+      - name: "{{ sync_plan_name }}"
+        date: "{{ sync_plan_date }}"
+        interval: "{{  sync_interval }}"
         enabled: true
-        description: "Sync Plan for Red Hat products"
+        description: "Default Sync Plan for Red Hat products"
 

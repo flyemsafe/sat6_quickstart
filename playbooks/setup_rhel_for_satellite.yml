@@ -75,6 +75,11 @@
         system_registered: yes
       when: "'This system is not yet registered' not in subscription_status.stderr"
 
+    - name: fail when system not registered and no registration information is provided
+      fail:
+        msg: "System is not registered. Edit playbooks/vars/main.yml with you registration info"
+      when: not system_registered and (rhsm_activationkey is not defined or rhsm_user is not defined)
+
   tasks:
     - name: ensure system is registered to Red Hat
       include_role:
@@ -84,4 +89,4 @@
     - name: create satellite paritions
       include_role:
         name: swygue-lvm
-
+      when: sat_vg_disk is defined and sat_vg_disk != ''
