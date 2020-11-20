@@ -1,7 +1,0 @@
----
-
-- name: "{{ satellite_domain }}"
-  organizations:
-    - name: "{{ satellite_default_organization }}"
-  locations:
-    - name: "{{ satellite_default_location }}"
