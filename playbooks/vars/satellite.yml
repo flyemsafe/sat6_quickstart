@@ -4,15 +4,16 @@ satellite_repos: "{{ rhsm_repos }}"
 satellite_verify_ssl: no
 rhsm_verify_ssl: yes
 manifest_download_dir: /root
-local_manifest_path: /home/rheron/Downloads/manifest_Lunchbox_20200728T182341Z.zip
+local_manifest_path: /home/rheron/Downloads/manifest_satellite01_20201119T213032Z.zip
 
 # Products releases
 sat_tools: "{{ satellite_version }"
+rhel8_eus: "8.2"
 
 
 # setup satellite org, location with with products
 satellite_orgs:
-  - name: ACME2
+  - name: DEMO2
     admin_username: "{{ satellite_user }}"
     admin_password: "{{ satellite_password }}"
     state: present
@@ -33,8 +34,7 @@ satellite_orgs:
     locations:
       - name: Orlando
         state: present
-    products:
-      - rhel8
+    products: "{{ products_to_enable }}"
     lifecycle_environments:
       - name: Dev
         prior: Library
