@@ -1,0 +1,36 @@
+---
+satellite_user: admin
+satellite_password: "{{ admin_user_password }}"
+satellite_default_organization: DEMO2
+satellite_default_location: Wakanda
+satellite_domain: lab.rodhouse.net
+satellite_hostname: "sat6u8.lab.rodhouse.net"
+satellite_ip_address: "172.23.11.130"
+satellite_version: 6.8
+satellite_url: "https://{{ satellite_hostname }}"
+satellite_server_inventory_name: sat6u8
+
+rhel_release: "8.3"
+ansible__repo_version: "2.9"
+
+products_to_enable:
+  - rhel8
+  - rhel8eus
+  - rhel8_ha
+
+# create subscription allocations, this requires your access.redhat.com
+# credentials the satellite var use_local_manifest must also be set to no
+rhsm_user: "{{ my_rhsm_user }}"
+rhsm_password: "{{ my_rhsm_user_pass }}"
+
+# Red Hat Subscription options - choose one
+## Option 1
+rhsm_org_id: "{{ cs_rhsm_org_id }}"
+rhsm_activationkey: "{{ cs_rhsm_activationkey }}"
+
+## Option 2
+#rhsm_user: ""
+#rhsm_pass: ""
+
+# Satellite dedicated disk
+sat_vg_disk: sdb
