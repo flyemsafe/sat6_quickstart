@@ -1,3 +1,0 @@
----
-ansible_user: root
-ansible_password: "{{ sat_user_password }}"

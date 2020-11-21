@@ -1,0 +1,39 @@
+[defaults]
+inventory           = inventory
+roles_path          = roles
+
+# Use the stdout_callback when running ad-hoc commands.
+#bin_ansible_callbacks = True
+vault_password_file   = $HOME/.vault_password
+#jinja2_native         = False
+
+# user to ssh as
+#remote_user    = root
+#sudo_user      = root
+#ask_sudo_pass  = False
+#ask_pass       = False
+
+# use the right python
+interpreter_python = auto
+
+#[privilege_escalation]
+#become_method=sudo
+#become_user=root
+
+#[inventory]
+#enable_plugins = host_list, script, yaml, ini, auto, vmware_vm_inventory
+
+#[ssh_connection]
+#ssh_args = -o ControlMaster=auto -o ControlPersist=18000 -o PreferredAuthentications=publickey,password
+
+[galaxy]
+server_list = automation_hub, release_galaxy
+
+[galaxy_server.automation_hub]
+url=https://cloud.redhat.com/api/automation-hub/
+auth_url=https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxXX
+
+[galaxy_server.release_galaxy]
+url=https://galaxy.ansible.com/
+token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
