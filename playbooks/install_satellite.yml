@@ -1,11 +1,7 @@
 ---
-- name: set up satellite
+- name: install Red Hat Satellite Server
   hosts:
     - sat
-
-  vars_files:
-    - vars/main.yml
-    - vars/satellite.yml
 
   roles:
     - swygue-install-satellite

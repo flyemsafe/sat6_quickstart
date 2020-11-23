@@ -5,10 +5,6 @@
 #    - capsule
   become: true
 
-  vars_files:
-    - vars/main.yml
-    - vars/rhel-sat-server.yml
-
   vars:
     system_registered: no
 
@@ -73,12 +69,21 @@
     - name: set subscription status
       set_fact:
         system_registered: yes
+        actkey_reg_info: "{{ yes if rhsm_activationkey is defined and rhsm_org_id is defined else no }}"
       when: "'This system is not yet registered' not in subscription_status.stderr"
 
+    - name: check if registration info is defined
+      set_fact:
+        actkey_reg_info: "{{ 'yes' if rhsm_activationkey is defined and rhsm_org_id is defined else 'no' }}"
+        user_reg_info: "{{ 'yes' if rhsm_user is defined and rhsm_pass is defined else 'no' }}"
+
     - name: fail when system not registered and no registration information is provided
+      vars:
+        can_register: "{{ 'yes' if user_reg_info or actkey_reg_info else 'no' }}"
       fail:
-        msg: "System is not registered. Edit playbooks/vars/main.yml with you registration info"
-      when: not system_registered and (rhsm_activationkey is not defined or rhsm_user is not defined)
+        msg: "System is not registered. Edit {{ inventory_dir }}/group_vars/sat/main.yml with your registration info"
+      #when: not system_registered and ( not actkey_reg_info or not user_reg_info)
+      when: not system_registered and not can_register
 
   tasks:
     - name: ensure system is registered to Red Hat

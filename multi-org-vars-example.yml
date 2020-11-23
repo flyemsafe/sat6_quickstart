@@ -1,0 +1,85 @@
+---
+satellite_orgs:
+  - name: "{{ satellite_default_organization }}"
+    admin_username: "{{ satellite_user }}"
+    admin_password: "{{ satellite_password }}"
+    state: present
+    sync_right_away: "{{ sync_now }}"
+    redhat_manifest:
+      name: "{{ manifest_name | default(omit) }}"
+      uuid: "{{ manifest_uuid | default(omit) }}"
+      use_local_manifest: "{{ use_downloaded_manifest }}"
+      manifest_upload: "{{ force_manifest_upload }}"
+      download_manifest: "{{ download_satellite_manifest }}"
+      state: present
+      pool: "{{ pool_ids | default([]) }}"
+    locations:
+      - name: "{{ satellite_default_location }}"
+        state: present
+    products: "{{ products_to_enable }}"
+    lifecycle_environments: "{{ default_lcen }}"
+    sync_plans:
+      - name: "{{ sync_plan_name }}"
+        date: "{{ sync_plan_date }}"
+        interval: "{{  sync_interval }}"
+        enabled: true
+        description: "Default Sync Plan for Red Hat products"
+  - name: ACME2
+    admin_username: "{{ satellite_user }}"
+    admin_password: "{{ satellite_password }}"
+    state: present
+    sync_right_away: "{{ sync_now }}"
+    redhat_manifest:
+      name: acme2_satellite
+      uuid: 2c81c347-xxxxx-421f-xxxxxx-6e8401650c02
+      manifest_upload: "{{ force_manifest_upload }}"
+      use_local_manifest: no
+      download_manifest: yes
+      state: present
+      pool: "{{ pool_ids | default([]) }}"
+    locations:
+      - name: Brooklyn
+        state: present
+    products:
+      - rhel8
+    lifecycle_environments: "{{ default_lcen }}"
+    sync_plans:
+      - name: "{{ sync_plan_name }}"
+        date: "{{ sync_plan_date }}"
+        interval: "{{  sync_interval }}"
+        enabled: true
+        description: "Default Sync Plan for Red Hat products"
+  - name: DEMO
+    admin_username: "{{ satellite_user }}"
+    admin_password: "{{ satellite_password }}"
+    state: present
+    sync_right_away: "{{ sync_now }}"
+    redhat_manifest:
+      name: sat6u8
+      use_local_manifest: no
+      download_manifest: no
+      manifest_upload: "{{ force_manifest_upload }}"
+      state: present
+      pool:
+        - id: 8a85f99c70d0557f0171092c717d1c1e
+          state: present
+          quantity: 1
+        - id: 8a85f99b70d0559c0171092d7cfd46e4
+          state: present
+          quantity: 1
+        - id: 8a85f99b727637b201729a1f407f5f3b
+          state: present
+          quantity: 1
+    locations:
+      - name: Boston
+        state: present
+    products:
+      - rhel8
+      - rhel7
+    lifecycle_environments: "{{ default_lcen }}"
+    sync_plans:
+      - name: "{{ sync_plan_name }}"
+        date: "{{ sync_plan_date }}"
+        interval: "{{  sync_interval }}"
+        enabled: true
+        description: "Default Sync Plan for Red Hat products"

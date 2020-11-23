@@ -1,0 +1,78 @@
+---
+satellite_repos: "{{ rhsm_repos }}"
+satellite_verify_ssl: no
+rhsm_verify_ssl: yes
+manifest_download_dir: /root
+local_manifest_path: "{{ downloaded_manifest_file }}"
+satellite_url: "https://{{ satellite_hostname }}"
+rhsm_password: "{{ rhsm_pass }}"
+
+rhsm_repos:
+  - rhel-7-server-rpms
+  - rhel-7-server-satellite-6.8-rpms
+  - rhel-7-server-satellite-maintenance-6-rpms
+  - rhel-server-rhscl-7-rpms
+  - rhel-7-server-ansible-2.9-rpms
+
+# Products releases
+sat_tools: "{{ satellite_version }}"
+
+# dedicated disk for satellite VG
+host_device: "{{ sat_vg_disk }}"
+
+# Satellite VG name
+vg_name: "{{ sat_vg_name }}"
+
+# Filesystems
+logical_volumes:
+  - name: cache
+    size: 20g
+    mount_dir: /var/cache/pulp
+    fstype: xfs
+  - name: pulp
+    size: 300g
+    mount_dir: /var/lib/pulp
+    fstype: xfs
+  - name: mongodb
+    size: 50g
+    mount_dir: /var/lib/mongodb
+    fstype: xfs
+  - name: log
+    size: 10g
+    mount_dir: /var/log
+    fstype: xfs
+  - name: pqsql
+    size: 10g
+    mount_dir: /var/opt/rh/rh-postgresql12/lib/pgsql
+    fstype: xfs
+  - name: squid
+    size: 10g
+    mount_dir: /var/spool/squid
+    fstype: xfs
+
+# setup satellite org, location with with products
+satellite_orgs:
+  - name: "{{ satellite_default_organization }}"
+    admin_username: "{{ satellite_user }}"
+    admin_password: "{{ satellite_password }}"
+    state: present
+    sync_right_away: "{{ sync_now }}"
+    redhat_manifest:
+      name: "{{ manifest_name | default(omit) }}"
+      uuid: "{{ manifest_uuid | default(omit) }}"
+      use_local_manifest: "{{ use_downloaded_manifest }}"
+      download_manifest: "{{ download_satellite_manifest }}"
+      manifest_upload: "{{ force_manifest_upload }}"
+      state: present
+      pool: "{{ pool_ids | default([]) }}"
+    locations:
+      - name: "{{ satellite_default_location }}"
+        state: present
+    products: "{{ products_to_enable }}"
+    lifecycle_environments: "{{ default_lcen }}"
+    sync_plans:
+      - name: "{{ sync_plan_name }}"
+        date: "{{ sync_plan_date }}"
+        interval: "{{  sync_interval }}"
+        enabled: true
+        description: "Default Sync Plan for Red Hat products"
