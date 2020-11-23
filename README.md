@@ -6,7 +6,7 @@ This projects aims to get you up and running with the Red Hat Satellite Server q
 - Service Level
 - Subscriptions
 
-You should build upon this automation to fine to it to your desire.
+You should build upon this automation to fine tune it to your desire by investing the collections and roles used by this project.
 
 |  Playbooks | Purpose |
 | --- | --- |
@@ -68,17 +68,17 @@ If you are using Ansible Tower to run the playbooks. You can store your vault pa
 
 If you are not using a vault password, use `ansible-playbook --ask-vault-pass` instead of `ansible-playbook`.
 
-Setup your RHEL host
+**Setup your RHEL host**
 ```
 ansible-playbook playbooks/setup_rhel_for_satellite.yml
 ```
 
-Install Satellite
+**Install Satellite**
 ```
 ansible-playbook playbooks/install_satellite.yml
 ```
 
-Configure Satellite
+**Configure Satellite**
 ```
 ansible-playbook playbooks/configure_satellite.yml
 ```
