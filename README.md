@@ -37,10 +37,9 @@ galaxy install -r roles/requirements.yml
 
 ## Inventory
 1. Update `inventory/host.yml` with your satellite connection details
-2. Update the `ansible_password` in inventory/group_vars/sat/main.yml
-3. Update playbooks/vars/main.yml
+2. Update the vars in `inventory/group_vars/sat/main.yml`
 
-The vars file playbooks/vars/main.yml it is documented to help you understand what needs to be changed. You can declare all your sentive vars in a ansible vault as described below.
+The vars file `inventory/group_vars/sat/main.yml` it is documented to help you understand what needs to be changed. You can declare all your sentive vars in a ansible vault as described below.
 
 In this example I am using [Ansible vault](https://www.tecmint.com/use-ansible-vault-in-playbooks-to-protect-sensitive-data/), which I recommend. However, you can just leave the password in plaintext and it will work. Not secure though.
 
