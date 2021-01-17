@@ -10,3 +10,6 @@ roles:
 
   - src: git+https://github.com/flyemsafe/swygue-install-satellite.git
     version: dev
+
+  - src: git+https://github.com/flyemsafe/redhat-satellite-quickstart.git
+    version: master
