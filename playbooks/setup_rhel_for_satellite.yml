@@ -1,9 +1,12 @@
 ---
 - name: setup server to be satellite or a capsule
   hosts:
-    - sat
-#    - capsule
+    - satellite
   become: true
+
+  vars_files:
+    - vars/vault.yml
+    - vars/satellite_server.yml
 
   vars:
     system_registered: no
@@ -29,8 +32,10 @@
         - ansible_facts['processor_count'] | int * ansible_facts['processor_count'] | int < 4
 
     - name: check memory
+      vars:
+        vm_mem: "{{ ansible_facts['memory_mb']['real']['total'] }}"
       fail:
-        msg: "Satellite requires at least 20GB of ram"
+        msg: "Satellite requires at least 20GB of ram. Only {{ vm_mem }} found"
       when:
         - ansible_facts['memory_mb']['real']['total'] | int < 20480
 
@@ -59,6 +64,11 @@
       when:
         - dns_status.rc | int != 0
 
+    - name: check if registration info is defined
+      set_fact:
+        actkey_reg_info: "{{ 'yes' if rhsm_activationkey is defined and rhsm_org_id is defined else 'no' }}"
+        user_reg_info: "{{ 'yes' if rhsm_user is defined and rhsm_pass is defined else 'no' }}"
+
     - name: check registration status
       command: subscription-manager identity
       ignore_errors: yes
@@ -68,14 +78,27 @@
 
     - name: set subscription status
       set_fact:
-        system_registered: yes
-        actkey_reg_info: "{{ yes if rhsm_activationkey is defined and rhsm_org_id is defined else no }}"
+        system_registered: 'yes'
       when: "'This system is not yet registered' not in subscription_status.stderr"
 
-    - name: check if registration info is defined
+    - name: Get the current attached subscription pools
+      shell: |
+        if subscription-manager list --consumed --pool-only | grep -q {{ satellite_pool_id }}
+        then
+            echo True
+        else
+            echo False
+        fi
+      register: _subscription_pool
+      ignore_errors: yes
+      changed_when: false
+      become: yes
+      when: system_registered|bool
+
+    - name: Set system to register if not attached to the Red Hat Satellite Infrastructure subscription pool  
       set_fact:
-        actkey_reg_info: "{{ 'yes' if rhsm_activationkey is defined and rhsm_org_id is defined else 'no' }}"
-        user_reg_info: "{{ 'yes' if rhsm_user is defined and rhsm_pass is defined else 'no' }}"
+        system_registered: False
+      when: system_registered|bool and _subscription_pool.stdout == 'False'
 
     - name: fail when system not registered and no registration information is provided
       vars:
@@ -89,9 +112,9 @@
     - name: ensure system is registered to Red Hat
       include_role:
         name: swygue-redhat-subscription
-      when: not system_registered or not is_repos_enabled
+      when: not system_registered|bool
 
-    - name: create satellite paritions
+    - name: create satellite partitions
       include_role:
         name: swygue-lvm
       when: sat_vg_disk is defined and sat_vg_disk != ''
